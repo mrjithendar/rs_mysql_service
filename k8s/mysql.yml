@@ -36,7 +36,7 @@ spec:
               topologyKey: "kubernetes.io/hostname"
       containers:
         - name: mysql
-          image: 826334059644.dkr.ecr.us-east-1.amazonaws.com/roboshop-mysql-int:latest
+          image: 826334059644.dkr.ecr.us-east-1.amazonaws.com/roboshop-mysql-demo:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 3306

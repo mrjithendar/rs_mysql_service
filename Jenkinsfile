@@ -12,11 +12,11 @@ pipeline {
         AWS_ACCOUNT_ID = "826334059644"
         vault = credentials('vaultToken')
         tfvars = "vars/${params.Options}.tfvars"
-        eks_cluster_name = "roboshop-eks-cluster-int"
+        eks_cluster_name = "dkode-eks-cluster-demo"
+        service = mysql_demo
     }
 
     stages {
-
 
         stage ('Docker Login') {
             steps {
@@ -25,14 +25,10 @@ pipeline {
         }
 
         stage ('Build Docker Images') {
-            stage ("Build mysql Docker Image") {
-                    steps {
-                        dir("Docker/mysql") {
-                            sh "docker build -t roboshop-mysql-int ."
-                            sh "docker tag roboshop-mysql-int:latest ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/roboshop-mysql-int:latest"
-                            sh "docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/roboshop-mysql-int:latest"
-                    }
-                }
+            steps {
+                sh "docker build -t ${service} ."
+                sh "docker tag ${service}:latest ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${service}:latest"
+                sh "docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${service}:latest"
             }
         }
     }
