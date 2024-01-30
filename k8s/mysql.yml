@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  namespace: roboshop
+  labels:
+    app: mysql
+    purpose: roboshop
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: mysql
+      purpose: roboshop
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        app: mysql
+        purpose: roboshop
+    spec:
+      tolerations:
+        - key: "purpose"
+          operator: "Equal"
+          value: "roboshop"
+          effect: "PreferNoSchedule"
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - mysql
+              topologyKey: "kubernetes.io/hostname"
+      containers:
+        - name: mysql
+          image: 826334059644.dkr.ecr.us-east-1.amazonaws.com/roboshop-mysql-int:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3306
+
