@@ -1,6 +1,3 @@
--- select user from mysql.user;
--- drop user shipping;
-
 /* create database if not exist */
 create database if not exists cities;
 
