@@ -13,14 +13,39 @@ pipeline {
         vault = credentials('vaultToken')
         tfvars = "vars/${params.Options}.tfvars"
         eks_cluster_name = "roboshop-eks-cluster-demo"
-        service = "mysql_demo"
+        service = "mysql_service"
     }
 
     stages {
 
+
+        stage ('Docker Login') {
+            steps {
+                sh "aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+            }
+        }
+
+        stage ('Build Docker Images') {
+            steps {
+                sh "docker build -t ${service} ."
+                sh "docker tag ${service}:latest ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${service}:latest"
+                sh "docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${service}:latest"
+            }
+        }
+
         stage ('EKS Acthenticate') {
             steps {
                 sh "aws eks update-kubeconfig --region ${AWS_DEFAULT_REGION} --name ${eks_cluster_name}"
+            }
+        }
+
+        stage ('Deploy App') {
+            steps {
+                sh "curl -LO https://raw.githubusercontent.com/mrjithendar/tools/master/namespace.sh"
+                sh "sh namespace.sh"
+                sh "kubectl apply -f k8s/deployment.yml"
+                sh "kubectl apply -f k8s/service.yml"
+                sh "kubectl apply -f k8s/ingress.yml"
             }
         }
     }
