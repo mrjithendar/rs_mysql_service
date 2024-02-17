@@ -9,7 +9,7 @@ helm ls -n $NS | grep mysql
 
 if [ $? -eq 0 ]; then
   echo "mysql installed already, trying to upgrade mysql."
-  helm upgrade mysql bitnami/mysql -n $NS --create-namespace=true --values k8s/values.yml
+  helm upgrade --install mysql bitnami/mysql -n $NS --create-namespace=true --values k8s/values.yml
   MYSQL_ROOT_PASSWORD=$(kubectl get secret --namespace roboshop mysql -o jsonpath="{.data.mysql-root-password}" | base64 -d)
   echo "mysql username: root and password: $MYSQL_ROOT_PASSWORD"
   else

@@ -147,7 +147,7 @@ auth:
   ## customPasswordFiles:
   ##   root: /vault/secrets/mysql-root
   ##   user: /vault/secrets/mysql-user
-  ##   replicator: /vault/secrets/mysql-replicator
+  ##   replicator: /vault/secrets/mysql-replictor
   ##
   customPasswordFiles: {}
   ## @param auth.defaultAuthenticationPlugin Sets the default authentication plugin, by default it will use `mysql_native_password`
