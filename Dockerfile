@@ -2,10 +2,10 @@ FROM mysql:latest
 
 VOLUME /data
 
-ENV MYSQL_ALLOW_EMPTY_PASSWORD=yes \
-    MYSQL_DATABASE=cities \
-    MYSQL_USER=shipping \
-    MYSQL_PASSWORD="RoboShop@1"
+# ENV MYSQL_ALLOW_EMPTY_PASSWORD=yes \
+#     MYSQL_DATABASE=cities \
+#     MYSQL_USER=shipping \
+#     MYSQL_PASSWORD="RoboShop@1"
 
 # change datadir entry in /etc/mysql/my.cnf
 COPY config.sh /root/
