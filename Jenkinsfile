@@ -13,7 +13,7 @@ pipeline {
         vault = credentials('vaultToken')
         tfvars = "vars/${params.Options}.tfvars"
         eks_cluster_name = "roboshop-eks-cluster-demo"
-        service = "mysql_service"
+        service = "mysql_demo"
     }
 
     stages {
