@@ -28,25 +28,15 @@ spec:
         - name: mysql
           image: 826334059644.dkr.ecr.us-east-1.amazonaws.com/mysql_demo:latest
           ports:
-          - containerPort: 3306
+            - containerPort: 3306
+          envFrom:
+            - configMapRef:
+                name: mysql-secrets
           resources:
             limits:
-              cpu: 400m
-              memory: 400Mi
+              memory: 2Gi
+              cpu: "1"
             requests:
-              cpu: 400m
-              memory: 400Mi
-          # env:
-          # - name: MYSQL_ROOT_PASSWORD
-          #   valueFrom:
-          #     secretKeyRef:
-          #       key: mysql-root-password
-          #       name: mysql-secrets
-          # - name: MYSQL_PASSWORD
-          #   valueFrom:
-          #     secretKeyRef:
-          #       key: mysql-password
-          #       name: mysql-secrets
-          #       optional: true
-        # - name: MYSQL_USER
-        # - name: MYSQL_DATABASE
+              memory: 1Gi
+              cpu: "0.5"
+            

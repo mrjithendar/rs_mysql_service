@@ -1,0 +1,10 @@
+apiVersion: v1
+data:
+  MYSQL_ROOT_PASSWORD: RoboShop@1
+  MYSQL_PASSWORD: RoboShop@1
+  MYSQL_USER: shipping
+  MYSQL_DATABASE: cities
+kind: ConfigMap
+metadata:
+  name: mysql-secrets
+  namespace: roboshop
