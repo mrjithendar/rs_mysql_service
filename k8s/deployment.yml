@@ -29,6 +29,9 @@ spec:
           image: 826334059644.dkr.ecr.us-east-1.amazonaws.com/mysql_demo:latest
           ports:
             - containerPort: 3306
+          env:
+            - name: MYSQL_AUTH_PLUGIN
+              value: caching_sha2_password
           envFrom:
             - configMapRef:
                 name: mysql-secrets
