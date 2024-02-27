@@ -1,2 +1,10 @@
-kubectl cp your_database_dump.sql <mysql-pod>:/tmp/
-kubectl exec -it <mysql-pod> -- mysql -u root -p <your_database> < /tmp/your_database_dump.sql
+POD=$(kubectl get pods -n $NS | grep mysql | awk '{print $1}' | head -n 1)
+
+echo "copying databases"
+kubectl cp dbs/config.sql $POD:/tmp/ -n $NS
+kubectl cp dbs/database.sql $POD:/tmp/ -n $NS
+kubectl exec -it $POD -n $NS -- ls -al /tmp
+
+echo "importing databases"
+kubectl exec -it $POD -n $NS -- "mysql -u root -p$MYSQL_ROOT_PASSWORD cities < /tmp/config.sql"
+kubectl exec -it $POD -n $NS -- "mysql -u root -p$MYSQL_ROOT_PASSWORD cities  < /tmp/database.sql"

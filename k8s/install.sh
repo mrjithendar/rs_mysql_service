@@ -23,6 +23,17 @@ if [ $? -eq 0 ]; then
     echo "mysql username: root and password: $MYSQL_ROOT_PASSWORD"
 fi
 
+POD=$(kubectl get pods -n $NS | grep mysql | awk '{print $1}' | head -n 1)
+
+echo "copying databases"
+kubectl cp dbs/config.sql $POD:/tmp/ -n $NS
+kubectl cp dbs/database.sql $POD:/tmp/ -n $NS
+kubectl exec -it $POD -n $NS -- ls -al /tmp
+
+echo "importing databases"
+kubectl exec -it $POD -n $NS -- mysql -u root -p$MYSQL_ROOT_PASSWORD cities < /tmp/config.sql
+kubectl exec -it $POD -n $NS -- "mysql -u root -p$MYSQL_ROOT_PASSWORD cities  < /tmp/database.sql"
+
 # To connect to your database:
 #   1. Run a pod that you can use as a client:
 #       kubectl run mysql-client --rm --tty -i --restart='Never' --image  docker.io/bitnami/mysql:8.0.36-debian-11-r4 --namespace roboshop --env MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD --command -- bash
